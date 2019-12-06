@@ -1,18 +1,18 @@
 <?php
 
+use App\Cart;
 use Illuminate\Database\Seeder;
 
 // phpcs:ignore PSR1.Classes.ClassDeclaration.MissingNamespace
-class DatabaseSeeder extends Seeder
+class CartsTableSeeder extends Seeder
 {
     /**
-     * Seed the application's database.
+     * Run the database seeds.
      *
      * @return void
      */
     public function run()
     {
-        $this->call(ProductsTableSeeder::class);
-        $this->call(CartsTableSeeder::class);
+        factory(Cart::class, 1000)->create();
     }
 }
