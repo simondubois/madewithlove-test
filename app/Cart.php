@@ -25,4 +25,12 @@ class Cart extends Model
         'total_price' => 'float',
         'paid_at' => 'datetime',
     ];
+
+    /**
+     * Get the cart products for the cart.
+     */
+    public function cartProducts()
+    {
+        return $this->hasMany(CartProduct::class);
+    }
 }

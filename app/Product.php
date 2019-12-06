@@ -17,6 +17,14 @@ class Product extends Model
     ];
 
     /**
+     * Get the cart products for the product.
+     */
+    public function cartProducts()
+    {
+        return $this->hasMany(CartProduct::class);
+    }
+
+    /**
      * Return the URL for the image representing the product.
      * Since no image has been provided with the instructions, Unspash will serve an image matching the product name.
      *
