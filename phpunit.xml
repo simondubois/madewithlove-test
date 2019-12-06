@@ -15,8 +15,8 @@
             <directory suffix="Test.php">./tests/Repositories</directory>
         </testsuite>
 
-        <testsuite name="Feature">
-            <directory suffix="Test.php">./tests/Feature</directory>
+        <testsuite name="Web">
+            <directory suffix="Test.php">./tests/Web</directory>
         </testsuite>
     </testsuites>
     <filter>
