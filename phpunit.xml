@@ -11,8 +11,8 @@
          processIsolation="false"
          stopOnFailure="false">
     <testsuites>
-        <testsuite name="Unit">
-            <directory suffix="Test.php">./tests/Unit</directory>
+        <testsuite name="Repositories">
+            <directory suffix="Test.php">./tests/Repositories</directory>
         </testsuite>
 
         <testsuite name="Feature">
