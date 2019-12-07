@@ -16,3 +16,6 @@ Route::get('/', function () {
 });
 
 Route::get('cart/show', 'CartController@show');
+
+Route::apiResource('cart_products', CartProductController::class)
+    ->only(['store']);
