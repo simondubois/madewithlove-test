@@ -43,4 +43,25 @@ class CartSessionRepository extends CartRepository
             ->whereNull('paid_at')
             ->findOrNew($cartId);
     }
+
+    /**
+     * Return the cart bound to the current session.
+     * If no cart exists yet, a new one is created and bound to the session.
+     *
+     * @return Cart
+     */
+    public function persistentCart(): Cart
+    {
+        $cart = $this->cart();
+
+        if ($cart->exists) {
+            return $cart;
+        }
+
+        $cart->save();
+
+        $this->session::put('cart_id', $cart->id);
+
+        return $cart;
+    }
 }
