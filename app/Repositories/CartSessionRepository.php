@@ -3,6 +3,8 @@
 namespace App\Repositories;
 
 use App\Cart;
+use App\CartProduct;
+use App\Product;
 use Illuminate\Support\Facades\Session;
 
 class CartSessionRepository extends CartRepository
@@ -22,6 +24,21 @@ class CartSessionRepository extends CartRepository
     public function __construct(Session $session)
     {
         $this->session = $session;
+    }
+
+    /**
+     * Make the cart persistent first.
+     * @inheritDoc
+     *
+     * @param Product $product
+     * @param integer $quantity
+     * @return CartProduct
+     */
+    public function addProduct(Product $product, int $quantity): CartProduct
+    {
+        $this->persistentCart();
+
+        return parent::addProduct($product, $quantity);
     }
 
     /**
