@@ -16,6 +16,7 @@ Route::get('/', function () {
 });
 
 Route::get('cart/show', 'CartController@show');
+Route::put('cart/pay', 'CartController@pay');
 
 Route::apiResource('cart_products', CartProductController::class)
     ->only(['store', 'update', 'destroy']);
