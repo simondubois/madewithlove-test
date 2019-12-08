@@ -4,8 +4,10 @@ namespace App\Repositories;
 
 use App\Cart;
 use App\CartProduct;
+use App\Exceptions\EmptyCartException;
 use App\Exceptions\UnrelatedCartProductException;
 use App\Product;
+use Carbon\Carbon;
 
 abstract class CartRepository
 {
@@ -83,6 +85,26 @@ abstract class CartRepository
 
         $cartProduct->delete();
         $this->recalculateCart();
+    }
+
+    /**
+     * Set the payment date on the cart.
+     * If the cart is empty, EmptyCartException is thrown.
+     *
+     * @throws EmptyCartException
+     * @return Cart
+     */
+    public function pay(): Cart
+    {
+        $cart = $this->cart();
+
+        if ($cart->cartProducts()->count() === 0) {
+            throw new EmptyCartException();
+        }
+
+        $cart->paid_at = Carbon::now();
+
+        return tap($cart)->save();
     }
 
     /**
