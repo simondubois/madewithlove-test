@@ -68,6 +68,24 @@ abstract class CartRepository
     }
 
     /**
+     * Delete the provided cart product.
+     * If the cart product does not belongs to the current cart, UnrelatedCartProductException is thrown.
+     *
+     * @throws UnrelatedCartProductException
+     * @param CartProduct $cartProduct
+     * @return void
+     */
+    public function deleteCartProduct(CartProduct $cartProduct): void
+    {
+        if ($cartProduct->cart->isNot($this->cart())) {
+            throw new UnrelatedCartProductException();
+        }
+
+        $cartProduct->delete();
+        $this->recalculateCart();
+    }
+
+    /**
      * Update cart's total_price.
      *
      * @return void
