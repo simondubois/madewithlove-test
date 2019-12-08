@@ -51,4 +51,22 @@ class CartProductController extends Controller
             $cartProduct
         );
     }
+
+    /**
+     * Remove cart product from the cart bound to the current session.
+     *
+     * @param CartProduct $cartProduct
+     * @param CartSessionRepository $repository
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(CartProduct $cartProduct, CartSessionRepository $repository)
+    {
+        try {
+            $repository->deleteCartProduct($cartProduct);
+        } catch (UnrelatedCartProductException $exception) {
+            abort(403, 'UNRELATED_CART_PRODUCT');
+        }
+
+        return response()->noContent();
+    }
 }
