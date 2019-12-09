@@ -95,6 +95,21 @@ class UpdateTest extends TestCase
         $response->assertExactJson(['message' => 'UNRELATED_CART_PRODUCT']);
     }
 
+    public function test zero quantity()
+    {
+        // given
+        factory(Product::class)->create(['name' => 'AAA', 'price' => 123.45]);
+        factory(Cart::class)->create(['paid_at' => null]);
+        factory(CartProduct::class)->create(['cart_id' => 1, 'product_id' => 1, 'quantity' => 1]);
+        $this->session(['cart_id' => 1]);
+
+        // when
+        $response = $this->json('PUT', 'cart_products/1', ['quantity' => 0]);
+
+        // then
+        $response->assertNoContent();
+    }
+
     public function test strictly positive quantity()
     {
         // given

@@ -47,6 +47,10 @@ class CartProductController extends Controller
             abort(403, 'UNRELATED_CART_PRODUCT');
         }
 
+        if ($cartProduct->trashed()) {
+            return response()->noContent();
+        }
+
         return new CartProductResource(
             $cartProduct
         );

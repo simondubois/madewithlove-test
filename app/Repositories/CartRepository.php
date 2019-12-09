@@ -100,6 +100,7 @@ abstract class CartRepository
     /**
      * Update the cart product with the provided quantity.
      * If the cart product does not belongs to the current cart, UnrelatedCartProductException is thrown.
+     * If the quantity is 0, the cart product is not updated but softly deleted and returned.
      * If the cart product was deleted, it is restored.
      *
      * @throws UnrelatedCartProductException
@@ -111,6 +112,11 @@ abstract class CartRepository
     {
         if ($cartProduct->cart->isNot($this->cart())) {
             throw new UnrelatedCartProductException();
+        }
+
+        if ($quantity === 0) {
+            $this->deleteCartProduct($cartProduct);
+            return $cartProduct->fresh();
         }
 
         if ($cartProduct->trashed()) {

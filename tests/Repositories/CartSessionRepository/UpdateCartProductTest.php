@@ -81,4 +81,24 @@ class UpdateCartProductTest extends TestCase
         $this->assertSame(1234.5, $updatedCartProduct->total_price);
         $this->assertSame(1234.5, $updatedCartProduct->cart->total_price);
     }
+
+    public function test existing cart with zero quantity()
+    {
+        // given
+        factory(Product::class)->create(['name' => 'AAA', 'price' => 123.45]);
+        factory(Cart::class)->create(['paid_at' => null]);
+        $createdCartProduct = factory(CartProduct::class)->create(['cart_id' => 1, 'product_id' => 1, 'quantity' => 1]);
+        $this->session(['cart_id' => 1]);
+
+        // when
+        $updatedCartProduct = app(CartSessionRepository::class)->updateCartProduct($createdCartProduct, 0);
+
+        // then
+        $this->assertInstanceOf(CartProduct::class, $updatedCartProduct);
+        $this->assertFalse($updatedCartProduct->isDirty());
+        $this->assertTrue($updatedCartProduct->trashed());
+        $this->assertSame(1, $updatedCartProduct->quantity);
+        $this->assertSame(123.45, $updatedCartProduct->total_price);
+        $this->assertSame(0.0, $updatedCartProduct->cart->total_price);
+    }
 }
