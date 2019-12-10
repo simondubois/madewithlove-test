@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('home')->with('products', \App\Product::all());
 });
 
 Route::get('cart/show', 'CartController@show');
