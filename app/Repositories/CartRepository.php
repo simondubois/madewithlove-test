@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Cart;
 use App\CartProduct;
+use App\Exceptions\UnrelatedCartProductException;
 use App\Product;
 
 abstract class CartRepository
@@ -76,5 +77,34 @@ abstract class CartRepository
         $cart = $this->cart();
         $cart->total_price = $cart->cartProducts()->sum('total_price');
         $cart->save();
+    }
+
+    /**
+     * Update the cart product with the provided quantity.
+     * If the cart product does not belongs to the current cart, UnrelatedCartProductException is thrown.
+     * If the cart product was deleted, it is restored.
+     *
+     * @throws UnrelatedCartProductException
+     * @param CartProduct $cartProduct
+     * @param integer $quantity
+     * @return CartProduct
+     */
+    public function updateCartProduct(CartProduct $cartProduct, int $quantity): CartProduct
+    {
+        if ($cartProduct->cart->isNot($this->cart())) {
+            throw new UnrelatedCartProductException();
+        }
+
+        if ($cartProduct->trashed()) {
+            $cartProduct->restore();
+        }
+
+        $cartProduct->quantity = $quantity;
+        $cartProduct->total_price = $cartProduct->product_price * $cartProduct->quantity;
+
+        $cartProduct->save();
+        $this->recalculateCart();
+
+        return $cartProduct->load('cart');
     }
 }
