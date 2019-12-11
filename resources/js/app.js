@@ -7,6 +7,7 @@ Vue.use(Vuex);
 new Vue({
     el: '#app',
     components: {
+        CartCountChart: require('./components/CartCountChart.vue').default,
         CartWidget: require('./components/CartWidget.vue').default,
         CheckoutForm: require('./components/CheckoutForm.vue').default,
     },
@@ -17,6 +18,10 @@ new Vue({
                 ...require('./stores/cart.js'),
             },
         },
+    }),
+    data: () => ({
+        statisticsEnd: new Date().toISOString().slice(0, 10),
+        statisticsStart: new Date().toISOString().slice(0, 10),
     }),
     created() {
         this.$store.dispatch('cart/refresh');

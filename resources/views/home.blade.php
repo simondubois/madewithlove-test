@@ -24,6 +24,12 @@
                 @include('checkout')
             </div>
 
+            <hr>
+
+            <div id="statistics-section" class="container py-5">
+                @include('statistics')
+            </div>
+
         </div>
 
         <script src="{{ mix('js/app.js') }}"></script>

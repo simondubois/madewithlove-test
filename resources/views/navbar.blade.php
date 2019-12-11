@@ -31,6 +31,18 @@
                 </a>
             </li>
 
+            <li class="nav-item">
+                <a class="nav-link" href="#statistics-section">
+
+                    <i class="fas fa-fw fa-chart-bar"></i>
+
+                    <span class="d-none d-sm-inline pl-1">
+                        Statistics
+                    </span>
+
+                </a>
+            </li>
+
         </ul>
 
         <ul class="navbar-nav">
