@@ -133,6 +133,21 @@ abstract class CartRepository
     }
 
     /**
+     * Update payment_method.
+     *
+     * @param string $paymentMethod
+     * @return Cart
+     */
+    public function updatePaymentMethod(string $paymentMethod): Cart
+    {
+        $cart = $this->cart();
+
+        $cart->payment_method = $paymentMethod;
+
+        return tap($cart)->save();
+    }
+
+    /**
      * Update user email and name.
      *
      * @param string $email
