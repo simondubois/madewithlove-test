@@ -131,4 +131,21 @@ abstract class CartRepository
 
         return $cartProduct->load('cart');
     }
+
+    /**
+     * Update user email and name.
+     *
+     * @param string $email
+     * @param string $name
+     * @return Cart
+     */
+    public function updatePersonalInformation(string $email, string $name): Cart
+    {
+        $cart = $this->cart();
+
+        $cart->email = $email;
+        $cart->name = $name;
+
+        return tap($cart)->save();
+    }
 }
