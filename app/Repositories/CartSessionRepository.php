@@ -5,7 +5,7 @@ namespace App\Repositories;
 use App\Cart;
 use Illuminate\Support\Facades\Session;
 
-class CartSessionRepository
+class CartSessionRepository extends CartRepository
 {
     /**
      * Current HTTP session
