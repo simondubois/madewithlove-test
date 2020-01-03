@@ -1,0 +1,31 @@
+#/bin/bash
+
+export PATH=$PATH:./vendor/bin:./node_modules/.bin
+export HISTFILE=$HOME/.bash_history_madewithlove-test
+touch $HISTFILE
+
+function dev-install {
+    # git clone git@github.com:simondubois/madewithlove-test.git ./
+    composer install
+    cp .env.example .env
+    php artisan key:generate
+    sed -i "" "s/DB_DATABASE=.*/DB_DATABASE=madewithlove-test/g" .env
+    sed -i "" "s/DB_USERNAME=.*/DB_USERNAME=root/g" .env
+    sed -i "" "s/DB_PASSWORD=.*/DB_PASSWORD=/g" .env
+    dev-migrate
+    npm install
+}
+
+function dev-migrate {
+    mysql -e "DROP DATABASE \`madewithlove-test\`" 2> /dev/null
+    mysql -e "CREATE DATABASE \`madewithlove-test\`"
+    php artisan migrate --seed
+}
+
+function prod-update {
+    ssh $DESK_MADEWITHLOVETEST_PROD_HOST "cd $DESK_MADEWITHLOVETEST_PROD_PATH && git fetch"
+    ssh $DESK_MADEWITHLOVETEST_PROD_HOST "cd $DESK_MADEWITHLOVETEST_PROD_PATH && git reset origin/master --hard"
+    ssh $DESK_MADEWITHLOVETEST_PROD_HOST "cd $DESK_MADEWITHLOVETEST_PROD_PATH && php-7.3 composer install --optimize-autoloader --no-dev"
+    ssh $DESK_MADEWITHLOVETEST_PROD_HOST "cd $DESK_MADEWITHLOVETEST_PROD_PATH && php-7.3 artisan view:clear"
+    open $DESK_MADEWITHLOVETEST_PROD_URL
+}
